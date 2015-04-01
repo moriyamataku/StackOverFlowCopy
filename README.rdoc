@@ -1,28 +1,44 @@
-== README
+##概要
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+rails練習用コピーアプリ
 
-Things you may want to cover:
+##対象アプリ
 
-* Ruby version
+「stackoverflow」
 
-* System dependencies
+##作成機能
 
-* Configuration
+・質問一覧表示
+　・タブ切り替え（アクティブ、人気、今週、今月）
+　・タグ絞り込み
+・質問回答詳細
+　・回答新規、編集
+　・△▽☆✔︎付け、外し
+　・コメント追加、削除
+・新規質問
+・ログイン
 
-* Database creation
+##作成対象外機能
 
-* Database initialization
+・StackExchange
+・ツアー、ヘルプ
+・質問検索（上メニュー）
+　・質問
+　・タグ
+　・ユーザー
+　・バッジ
+　・未回答
+・プロフィール
 
-* How to run the test suite
+##セットアップ
 
-* Services (job queues, cache servers, search engines, etc.)
+migrate後にseedで初期データ登録
 
-* Deployment instructions
+##課題点／疑問点
 
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+・「コメント」「投票」の扱いについて
+・build→post時に親のidは引き継がない？
+・Hamlでif文をシンプルに書くには？
+・ルーティングに_（アンダーバー）は含めないほうがいい？
+・controllerで「:id」「:モデル名_id」があるが。。
+・他のサイトのcssを参考につくるのは難しい。
