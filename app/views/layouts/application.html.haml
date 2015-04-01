@@ -1,0 +1,46 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title StackOverFlowCopy
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    .topbar
+      %p
+        - if user_signed_in?
+          = "ユーザー:#{current_user.email}"
+          |
+          = link_to "ログオフ", destroy_user_session_path, :method => :delete
+        - else
+          = link_to "サインイン", new_user_registration_path
+          |
+          = link_to "ログイン", new_user_session_path
+        .container
+    #header
+      #hlogo
+        %br
+        %br
+        = link_to "StackOverFlowCopy", root_path
+      #hmenus
+        .mainnavs
+          %ul
+            %li
+              %p 質問
+            %li
+              %p タグ
+            %li
+              %p ユーザー
+            %li
+              %p バッジ
+            %li
+              = link_to "未回答", questions_path(tab: :unanswered)
+        .askquestion
+          = link_to "質問する", new_question_path
+    #content
+      - if notice
+        %p.alert.alert-success= notice
+      - if alert
+        %p.alert.alert-danger= alert
+      = yield

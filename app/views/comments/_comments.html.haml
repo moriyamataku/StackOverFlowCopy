@@ -1,0 +1,21 @@
+.comments
+  %table
+    %tbody
+      - comments.each do |comment|
+        %tr{class: :comment}
+          %td{class: :commenttext}
+            = comment.body
+            %br
+            .started-comment
+              = "投稿日時:#{comment.updated_at.getlocal.strftime("%m月%d日 %H:%M")}"
+              |
+              = comment.user.user_name
+              |
+              = link_to_if comment.user == current_user, '削除する', "#{link_path}/#{comment.id}" , method: :delete
+            %hr
+- @comment = parent.comments.build
+= form_for @comment, url: link_path do |f|
+  .field
+    = f.text_field :body, class: "title-text"
+  .actions
+    = f.submit("コメントを投稿")

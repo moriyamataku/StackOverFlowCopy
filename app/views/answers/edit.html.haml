@@ -1,0 +1,5 @@
+#question-header
+  %h1
+    = link_to_if @question.user == current_user, @question.title, edit_question_path
+= render 'form'
+= link_to 'Back', @question

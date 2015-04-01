@@ -1,0 +1,52 @@
+#mainbar
+  .subheader
+    %h1　上位の質問
+    .tabs
+      = link_to "アクティブ", questions_path(tab: :active)
+      = link_to "人気", questions_path(tab: :hot)
+      = link_to "今週", questions_path(tab: :week)
+      = link_to "今月", questions_path(tab: :month)
+  #qlist-wrapper
+    #question-mini-list
+      - @questions.each do |question|
+        .question-summary
+          .cp
+            .votes
+              .mini-counts
+                = question.vote_point
+              %div
+                票
+            - if question.get_answers_count == 0
+              .status
+                .mini-counts
+                  = question.get_answers_count
+                %div
+                  回答
+            - elsif question.solved
+              .status.answered-accepted
+                .mini-counts
+                  = question.get_answers_count
+                %div
+                  回答
+            - else
+              .status.answered
+                .mini-counts
+                  = question.get_answers_count
+                %div
+                  回答
+            .views
+              .mini-counts
+                = question.get_views_count
+              %div
+                閲覧数
+          .summary
+            %h3
+              = link_to question.title, question_path(question)
+            .tags
+              - question.tags.each do |tag|
+                = link_to tag.name, questions_path(tag: tag.name), class: "post-tag"
+            .started
+              = "更新日時:#{question.updated_at.getlocal.strftime("%m月%d日 %H:%M")}"
+              |
+              = question.user.user_name
+  = paginate @questions

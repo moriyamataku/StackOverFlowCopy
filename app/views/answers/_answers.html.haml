@@ -1,0 +1,56 @@
+#answers
+  #answers-header
+    .subheader
+      %h2
+        = "#{@question.answers.count}件の回答"
+  .answer
+    %table
+      %tbody
+        - @question.answers.each do |answer|
+          %tr
+            %td{class: :votecell}
+              .vote
+                .vote-up-off
+                  - if answer.has_up_voted?(current_user)
+                    = link_to '▲', cancel_vote_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true
+                  - else
+                    = link_to '△', up_vote_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true
+                .vote-count-post
+                  = answer.vote_point
+                .vote-down-off
+                  - if answer.has_down_voted?(current_user)
+                    = link_to '▼', cancel_vote_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true
+                  - else
+                    = link_to '▽', down_vote_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true
+                .star-off
+                  - if answer.marked
+                    = link_to '✔︎', cancel_mark_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true
+                  - else
+                    = link_to '◯', mark_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true
+            %td{class: :postcell}
+              .post-text
+                = simple_format(answer.body)
+                %br
+              .started
+                = "更新日時:#{answer.updated_at.getlocal.strftime("%m月%d日 %H:%M")}"
+                |
+                = answer.user.user_name
+                |
+                = link_to_if answer.user == current_user, '編集する', edit_question_answer_path(question_id: @question, answer_id: answer)
+          %tr
+            %td{class: :votecell}
+            %td
+              = render partial: "comments/comments", locals: {comments: answer.comments, link_path: "/questions/#{@question.id}/answers/#{answer.id}/comments", parent: answer}
+          %tr
+            %td{colspan: 2}
+              %hr
+  %h2
+    回答する
+  - @answer = @question.answers.build
+  = render "answers/form"
+
+  -#= form_for [@question, answer] do |f|
+    .field
+      = f.text_area :body
+    .actions
+      = f.submit("回答を投稿")

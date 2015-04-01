@@ -1,0 +1,16 @@
+= form_for [@question, @answer] do |f|
+  - if @answer.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@answer.errors.count, "error")
+        prohibited this question from being saved:
+      %ul
+        - @question.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.text_area :body, class: "body-text"
+  .actions
+    - if @answer.persisted?
+      = f.submit "更新する"
+    - else
+      = f.submit "投稿する"
