@@ -71,7 +71,7 @@ class QuestionsController < ApplicationController
   end
 
   def tag_params
-    params.require(:tag_value)
+    params.fetch(:tag_value, {})
   end
 
   def regist_view

@@ -9,6 +9,8 @@ class Question < ActiveRecord::Base
 
   paginates_per 7
 
+  validates :title, :body, presence: true
+
   require 'active_support'
 
   #default_scope ->{order(updated_at: :desc)}
@@ -37,7 +39,7 @@ class Question < ActiveRecord::Base
     end
     strTags = tag_string.split(" ")
     strTags.each do |strTag|
-      tag = Tag.find_or_create_by(name: strTag)
+      tag = Tag.find_or_initialize_by(name: strTag)
       self.tags << tag
     end
   end
