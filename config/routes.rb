@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :questions, only: [:index, :show, :new, :create, :edit, :update] do
-  	resources :answers, only: [:create, :edit, :update] do
+    resources :answers, only: [:create, :edit, :update] do
       resources :comments, only: [:create, :destroy]
       member do
         put 'mark'
