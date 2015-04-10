@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :edit, :update, :up_vote, :down_vote, :cancel_vote, :favorite, :cancel_favorite]
+  after_action :regist_view, only: :show
 
   def index
     @questions = Question.order(updated_at: :desc).page(params[:page])
@@ -9,9 +10,6 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    if user_signed_in?
-      @question.regist_view(current_user)
-    end
   end
 
   def new
@@ -74,5 +72,11 @@ class QuestionsController < ApplicationController
 
   def tag_params
     params.require(:tag_value)
+  end
+
+  def regist_view
+    if user_signed_in?
+      @question.regist_view(current_user)
+    end
   end
 end
