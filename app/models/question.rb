@@ -11,10 +11,6 @@ class Question < ActiveRecord::Base
 
   validates :title, :body, presence: true
 
-  require 'active_support'
-
-  #default_scope ->{order(updated_at: :desc)}
-
   scope :tab, -> type {
     if type == "hot"
       where("updated_at > ?", Time.now - 2.days).order(views_count: :desc)
@@ -69,11 +65,7 @@ class Question < ActiveRecord::Base
   end
 
   def tag_value
-    value = ""
-    self.tags.each do |tag|
-      value += tag.name + " "
-    end
-    value
+    self.tags.map(&:name).join(' ')
   end
 
   def vote_point
@@ -81,7 +73,7 @@ class Question < ActiveRecord::Base
   end
 
   def get_answers_count
-    self.try(:answers_count)|| 0
+    self.try(:answers_count) || 0
   end
 
   def get_views_count
@@ -93,10 +85,10 @@ class Question < ActiveRecord::Base
   end
 
   def has_up_voted?(user)
-    (self.votes.find_by(user: user).present?)? self.votes.find_by(user: user).useful: false
+    (self.votes.find_by(user: user).present?) ? self.votes.find_by(user: user).useful : false
   end
 
   def has_down_voted?(user)
-    (self.votes.find_by(user: user).present?)? !self.votes.find_by(user: user).useful: false
+    (self.votes.find_by(user: user).present?) ? !self.votes.find_by(user: user).useful : false
   end
 end
