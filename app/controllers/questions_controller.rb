@@ -3,14 +3,9 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :up_vote, :down_vote, :cancel_vote, :favorite, :cancel_favorite]
 
   def index
-    if params.fetch(:tab, {}).present?
-      @questions = Question.tab(params.require(:tab)).page(params[:page])
-    elsif params.fetch(:tag, {}).present?
-      tag = Tag.find_by_name(params.require(:tag))
-      @questions = tag.questions.page(params[:page]).order(updated_at: :desc)
-    else
-      @questions = Question.page(params[:page]).order(updated_at: :desc)
-    end
+    @questions = Question.order(updated_at: :desc).page(params[:page])
+    @questions = @questions.tab(params[:tab]) if params[:tab].present?
+    @questions = @questions.tagged_with(params[:tag]) if params.fetch(:tag, {}).present?
   end
 
   def show

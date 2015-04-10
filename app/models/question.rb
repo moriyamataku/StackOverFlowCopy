@@ -26,9 +26,12 @@ class Question < ActiveRecord::Base
       order(updated_at: :desc)
     end
   }
+  scope :tagged_with, -> tag {
+    # TODO: 実装する
+    # tag join
+  }
 
   def regist_tags(tag_string)
-
     if self.persisted?
       self.tags.destroy_all
     end
