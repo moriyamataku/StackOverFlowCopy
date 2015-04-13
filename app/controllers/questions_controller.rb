@@ -1,22 +1,15 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :edit, :update, :up_vote, :down_vote, :cancel_vote, :favorite, :cancel_favorite]
+  after_action :regist_view, only: :show
 
   def index
-    if params.fetch(:tab, {}).present?
-      @questions = Question.tab(params.require(:tab)).page(params[:page])
-    elsif params.fetch(:tag, {}).present?
-      tag = Tag.find_by_name(params.require(:tag))
-      @questions = tag.questions.page(params[:page]).order(updated_at: :desc)
-    else
-      @questions = Question.page(params[:page]).order(updated_at: :desc)
-    end
+    @questions = Question.order(updated_at: :desc).page(params[:page])
+    @questions = @questions.tab(params[:tab]) if params[:tab].present?
+    @questions = @questions.tagged_with(params[:tag]) if params.fetch(:tag, {}).present?
   end
 
   def show
-    if user_signed_in?
-      @question.regist_view(current_user)
-    end
   end
 
   def new
@@ -78,6 +71,12 @@ class QuestionsController < ApplicationController
   end
 
   def tag_params
-    params.require(:tag_value)
+    params.fetch(:tag_value, {})
+  end
+
+  def regist_view
+    if user_signed_in?
+      @question.regist_view(current_user)
+    end
   end
 end

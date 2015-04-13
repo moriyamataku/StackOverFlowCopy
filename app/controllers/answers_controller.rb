@@ -3,7 +3,7 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: [:edit, :update, :up_vote, :down_vote, :cancel_vote, :mark, :cancel_mark]
 
   def create
-    @question = Question.find(params.require(:question_id))
+    @question = Question.find(params[:question_id])
     @answer = Answer.new(answer_params)
     @answer.question = @question
     @answer.user = current_user

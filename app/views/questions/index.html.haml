@@ -16,24 +16,8 @@
                 = question.vote_point
               %div
                 票
-            - if question.get_answers_count == 0
-              .status
-                .mini-counts
-                  = question.get_answers_count
-                %div
-                  回答
-            - elsif question.solved
-              .status.answered-accepted
-                .mini-counts
-                  = question.get_answers_count
-                %div
-                  回答
-            - else
-              .status.answered
-                .mini-counts
-                  = question.get_answers_count
-                %div
-                  回答
+            .status{class: question_answer_count_class(question)}
+              = answers_count_text(question)
             .views
               .mini-counts
                 = question.get_views_count
@@ -46,7 +30,7 @@
               - question.tags.each do |tag|
                 = link_to tag.name, questions_path(tag: tag.name), class: "post-tag"
             .started
-              = "更新日時:#{question.updated_at.getlocal.strftime("%m月%d日 %H:%M")}"
+              = "更新日時:#{l(question.updated_at)}"
               |
               = question.user.user_name
   = paginate @questions

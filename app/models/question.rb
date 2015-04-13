@@ -9,9 +9,7 @@ class Question < ActiveRecord::Base
 
   paginates_per 7
 
-  require 'active_support'
-
-  #default_scope ->{order(updated_at: :desc)}
+  validates :title, :body, presence: true
 
   scope :tab, -> type {
     if type == "hot"
@@ -26,15 +24,18 @@ class Question < ActiveRecord::Base
       order(updated_at: :desc)
     end
   }
+  scope :tagged_with, -> tag {
+    # TODO: 実装する
+    # tag join
+  }
 
   def regist_tags(tag_string)
-
     if self.persisted?
       self.tags.destroy_all
     end
     strTags = tag_string.split(" ")
     strTags.each do |strTag|
-      tag = Tag.find_or_create_by(name: strTag)
+      tag = Tag.find_or_initialize_by(name: strTag)
       self.tags << tag
     end
   end
@@ -64,11 +65,7 @@ class Question < ActiveRecord::Base
   end
 
   def tag_value
-    value = ""
-    self.tags.each do |tag|
-      value += tag.name + " "
-    end
-    value
+    self.tags.map(&:name).join(' ')
   end
 
   def vote_point
@@ -76,7 +73,7 @@ class Question < ActiveRecord::Base
   end
 
   def get_answers_count
-    self.try(:answers_count)|| 0
+    self.try(:answers_count) || 0
   end
 
   def get_views_count
@@ -88,10 +85,10 @@ class Question < ActiveRecord::Base
   end
 
   def has_up_voted?(user)
-    (self.votes.find_by(user: user).present?)? self.votes.find_by(user: user).useful: false
+    (self.votes.find_by(user: user).present?) ? self.votes.find_by(user: user).useful : false
   end
 
   def has_down_voted?(user)
-    (self.votes.find_by(user: user).present?)? !self.votes.find_by(user: user).useful: false
+    (self.votes.find_by(user: user).present?) ? !self.votes.find_by(user: user).useful : false
   end
 end
