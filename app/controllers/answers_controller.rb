@@ -49,11 +49,11 @@ class AnswersController < ApplicationController
     end
 
     def set_answer
-      @question = Question.find(params.require(:question_id))
-      if params.fetch(:answer_id, {}).present?
-        @answer = @question.answers.find(params.require(:answer_id))
-      else
-        @answer = @question.answers.find(params.require(:id))
-      end
+      @question = Question.find(params[:question_id])
+      @answer = if params.fetch(:answer_id, {}).present?
+                  @question.answers.find(params[:answer_id])
+                else
+                  @question.answers.find(params[:id])
+                end
     end
 end

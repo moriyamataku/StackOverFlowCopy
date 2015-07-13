@@ -6,7 +6,7 @@ class QuestionsController < ApplicationController
   def index
     @questions = Question.order(updated_at: :desc).page(params[:page])
     @questions = @questions.tab(params[:tab]) if params[:tab].present?
-    @questions = @questions.tagged_with(params[:tag]) if params.fetch(:tag, {}).present?
+    @questions = @questions.tagged_with(params[:tag]) if params[:tag].present?
   end
 
   def show
@@ -21,7 +21,7 @@ class QuestionsController < ApplicationController
     @question.user = current_user
     @question.regist_tags(tag_params)
     if @question.save
-      redirect_to questions_url
+      redirect_to @question
     else
       render :new
     end
@@ -63,7 +63,7 @@ class QuestionsController < ApplicationController
   private
 
   def set_question
-    @question = Question.find(params.require(:id))
+    @question = Question.find(params[:id])
   end
 
   def question_params
@@ -75,8 +75,6 @@ class QuestionsController < ApplicationController
   end
 
   def regist_view
-    if user_signed_in?
-      @question.regist_view(current_user)
-    end
+    @question.regist_view(current_user) if user_signed_in?
   end
 end
