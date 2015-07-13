@@ -1,36 +1,39 @@
-#mainbar
-  .subheader
-    %h1　上位の質問
-    .tabs
-      = link_to "アクティブ", questions_path(tab: :active)
-      = link_to "人気", questions_path(tab: :hot)
-      = link_to "今週", questions_path(tab: :week)
-      = link_to "今月", questions_path(tab: :month)
-  #qlist-wrapper
-    #question-mini-list
-      - @questions.each do |question|
-        .question-summary
-          .cp
-            .votes
-              .mini-counts
-                = question.vote_point
-              %div
-                票
-            .status{class: question_answer_count_class(question)}
-              = answers_count_text(question)
-            .views
-              .mini-counts
-                = question.get_views_count
-              %div
-                閲覧数
-          .summary
-            %h3
-              = link_to question.title, question_path(question)
-            .tags
-              - question.tags.each do |tag|
-                = link_to tag.name, questions_path(tag: tag.name), class: "post-tag"
-            .started
-              = "更新日時:#{l(question.updated_at)}"
-              |
-              = question.user.user_name
+.subheader
+  %h1　上位の質問
+  .tabs
+    = link_to "アクティブ", questions_path(tab: :active), {class: params[:tab] == "active" ? 'youarehere':'' }
+    = link_to "人気", questions_path(tab: :hot), {class: params[:tab] == "hot" ? 'youarehere':'' }
+    = link_to "今週", questions_path(tab: :week), {class: params[:tab] == "week" ? 'youarehere':'' }
+    = link_to "今月", questions_path(tab: :month), {class: params[:tab] == "month" ? 'youarehere':'' }
+#qlist-wrapper
+  #question-mini-list
+    - @questions.each do |question|
+      .question-summary
+        .cp
+          .votes
+            .mini-counts
+              = question.vote_point
+            %div
+              票
+          .status{class: question_answer_count_class(question)}
+            .mini-counts
+              = question.get_answers_count
+            %div
+              回答
+          .views
+            .mini-counts
+              = question.get_views_count
+            %div
+              閲覧数
+        .summary
+          %h3
+            = link_to question.title, question_path(question)
+          .tags
+            - question.tags.each do |tag|
+              = link_to tag.name, questions_path(tag: tag.name), class: "post-tag"
+          .started
+            /= "更新日時:#{l(question.updated_at)}"
+            = time_ago_in_words(question.updated_at)
+            |
+            = question.user.user_name
   = paginate @questions

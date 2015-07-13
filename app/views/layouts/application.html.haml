@@ -10,37 +10,37 @@
     .topbar
       %p
         - if user_signed_in?
-          = "ユーザー:#{current_user.email}"
-          |
+          = current_user.email
           = link_to "ログオフ", destroy_user_session_path, :method => :delete
         - else
           = link_to "サインイン", new_user_registration_path
-          |
           = link_to "ログイン", new_user_session_path
-        .container
     #header
       #hlogo
         %br
         %br
         = link_to "StackOverFlowCopy", root_path
       #hmenus
-        .mainnavs
-          %ul
-            %li
-              %p 質問
-            %li
-              %p タグ
-            %li
-              %p ユーザー
-            %li
-              %p バッジ
-            %li
-              = link_to "未回答", questions_path(tab: :unanswered)
-        .askquestion
-          = link_to "質問する", new_question_path
-    #content
+        %ul
+          %li
+            = link_to "質問", "#"
+          %li
+            = link_to "タグ", "#"
+          %li
+            = link_to "ユーザー", "#"
+          %li
+            = link_to "バッジ", "#"
+          %li{class: params[:tab] == "unanswered" ? 'youarehere':'' }
+            = link_to "未回答", questions_path(tab: :unanswered)
+          %li
+            = link_to "質問する", new_question_path
+    .container
       - if notice
         %p.alert.alert-success= notice
       - if alert
         %p.alert.alert-danger= alert
-      = yield
+      .row
+        .col-md-10
+          = yield
+        .col-md-2
+          %h2 Dummy

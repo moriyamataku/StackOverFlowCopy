@@ -4,38 +4,41 @@
       %tr
         %td{class: :votecell}
           .vote
-            .vote-up-off
-              - if @question.has_up_voted?(current_user)
-                = link_to '▲', cancel_vote_question_path(question_id: @question), method: :delete, remote: :true
-              - else
-                = link_to '△', up_vote_question_path(question_id: @question), method: :put, remote: :true
+            - if question.has_up_voted?(current_user)
+              = link_to cancel_vote_question_path(question_id: question), method: :delete, remote: :true, class: "vote-up vote-on" do
+                %i{class: "glyphicon glyphicon-triangle-top"}
+            - else
+              = link_to up_vote_question_path(question_id: question), method: :put, remote: :true, class: "vote-up vote-off" do
+                %i{class: "glyphicon glyphicon-triangle-top"}
             .vote-count-post
-              = @question.vote_point
-            .vote-down-off
-              - if @question.has_down_voted?(current_user)
-                = link_to '▼', cancel_vote_question_path(question_id: @question), method: :delete, remote: :true
-              - else
-                = link_to '▽', down_vote_question_path(question_id: @question), method: :put, remote: :true
-            .star-off
-              - if @question.has_favorite?(current_user)
-                = link_to '★', cancel_favorite_question_path(question_id: @question), method: :delete, remote: :true
-              - else
-                = link_to '☆', favorite_question_path(question_id: @question), method: :put, remote: :true
-        %td{class: :votecell}
+              = question.vote_point
+            - if question.has_down_voted?(current_user)
+              = link_to cancel_vote_question_path(question_id: question), method: :delete, remote: :true, class: "vote-down vote-on" do
+                %i{class: "glyphicon glyphicon-triangle-bottom"}
+            - else
+              = link_to down_vote_question_path(question_id: question), method: :put, remote: :true, class: "vote-down vote-off" do
+                %i{class: "glyphicon glyphicon-triangle-bottom"}
+            - if question.has_favorite?(current_user)
+              = link_to cancel_favorite_question_path(question_id: question), method: :delete, remote: :true, class: "vote-up vote-on" do
+                %i{class: "glyphicon glyphicon-star"}
+            - else
+              = link_to favorite_question_path(question_id: question), method: :put, remote: :true, class: "vote-up vote-off" do
+                %i{class: "glyphicon glyphicon-star"}
+        %td
           .post-text
-            = simple_format(@question.body)
+            = simple_format(question.body)
           .post-taglist
-            - @question.tags.each do |tag|
+            - question.tags.each do |tag|
               = link_to tag.name, questions_path, class: "post-tag"
             %br
           .started
-            = "更新日時:#{@question.updated_at.getlocal.strftime("%m月%d日 %H:%M")}"
+            = "更新日時:#{question.updated_at.getlocal.strftime("%m月%d日 %H:%M")}"
             |
-            = @question.user.user_name
+            = question.user.user_name
             |
-            = link_to_if @question.user == current_user, '編集する', edit_question_path(question_id: @question)
+            = link_to_if question.user == current_user, '編集する', edit_question_path(question_id: question)
       %tr
         %td{class: :votecell}
         %td
-          = render partial: "comments/comments", locals: {comments: @question.comments, link_path: "/questions/#{@question.id}/comments", parent: @question}
+          = render partial: "comments/comments", locals: {comments: question.comments, link_path: "/questions/#{question.id}/comments", parent: question}
 

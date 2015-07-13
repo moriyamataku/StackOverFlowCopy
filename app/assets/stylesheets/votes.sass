@@ -1,0 +1,25 @@
+@mixin vote-style
+  heigth: 20px
+  font-size: 30px
+  display: block
+
+.votecell
+  vertical-align: top
+  padding-right: 15px
+  .vote
+    min-width: 46px
+    text-align: center
+    .vote-up
+      @include vote-style
+    .vote-down
+      @include vote-style
+      margin-bottom: 5px
+    .vote-on
+      color: #006400
+    .vote-off
+      color: #777
+    .vote-count-post
+      margin: 8px 0
+      font-size: 20px
+      display: block
+      color: #777

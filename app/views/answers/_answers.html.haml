@@ -10,23 +10,26 @@
           %tr
             %td{class: :votecell}
               .vote
-                .vote-up-off
-                  - if answer.has_up_voted?(current_user)
-                    = link_to '▲', cancel_vote_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true
-                  - else
-                    = link_to '△', up_vote_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true
+                - if answer.has_up_voted?(current_user)
+                  = link_to cancel_vote_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true, class: "vote-up vote-on" do
+                    %i{class: "glyphicon glyphicon-triangle-top"}
+                - else
+                  = link_to up_vote_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true, class: "vote-up vote-off" do
+                    %i{class: "glyphicon glyphicon-triangle-top"}
                 .vote-count-post
                   = answer.vote_point
-                .vote-down-off
-                  - if answer.has_down_voted?(current_user)
-                    = link_to '▼', cancel_vote_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true
-                  - else
-                    = link_to '▽', down_vote_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true
-                .star-off
-                  - if answer.marked
-                    = link_to '✔︎', cancel_mark_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true
-                  - else
-                    = link_to '◯', mark_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true
+                - if answer.has_down_voted?(current_user)
+                  = link_to cancel_vote_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true, class: "vote-down vote-on" do
+                    %i{class: "glyphicon glyphicon-triangle-bottom"}
+                - else
+                  = link_to down_vote_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true, class: "vote-down vote-off" do
+                    %i{class: "glyphicon glyphicon-triangle-bottom"}
+                - if answer.marked
+                  = link_to cancel_mark_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true, class: "vote-up vote-on" do
+                    %i{class: "glyphicon glyphicon-ok"}
+                - else
+                  = link_to mark_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true, class: "vote-up vote-off" do
+                    %i{class: "glyphicon glyphicon-ok"}
             %td{class: :postcell}
               .post-text
                 = simple_format(answer.body)
@@ -48,9 +51,3 @@
     回答する
   - @answer = @question.answers.build
   = render "answers/form"
-
-  -#= form_for [@question, answer] do |f|
-    .field
-      = f.text_area :body
-    .actions
-      = f.submit("回答を投稿")
