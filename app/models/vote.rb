@@ -7,7 +7,7 @@ class Vote < ActiveRecord::Base
   end
 
   def self.has_down_voted?(user)
-    !find_by(user: user).try(:useful) || false
+    find_by(user: user).present? ? !find_by(user: user).useful : false
   end
 
   def self.vote_point
