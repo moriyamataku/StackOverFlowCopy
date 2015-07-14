@@ -10,20 +10,7 @@
           %tr
             %td{class: :votecell}
               .vote
-                - if answer.has_up_voted?(current_user)
-                  = link_to cancel_vote_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true, class: "vote-up vote-on" do
-                    %i{class: "glyphicon glyphicon-triangle-top"}
-                - else
-                  = link_to up_vote_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true, class: "vote-up vote-off" do
-                    %i{class: "glyphicon glyphicon-triangle-top"}
-                .vote-count-post
-                  = answer.vote_point
-                - if answer.has_down_voted?(current_user)
-                  = link_to cancel_vote_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true, class: "vote-down vote-on" do
-                    %i{class: "glyphicon glyphicon-triangle-bottom"}
-                - else
-                  = link_to down_vote_question_answer_path(question_id: @question, answer_id: answer), method: :put, remote: :true, class: "vote-down vote-off" do
-                    %i{class: "glyphicon glyphicon-triangle-bottom"}
+                = render partial: "answers/votes", locals: {votes: answer.votes, question: answer.question, answer: answer}
                 - if answer.marked
                   = link_to cancel_mark_question_answer_path(question_id: @question, answer_id: answer), method: :delete, remote: :true, class: "vote-up vote-on" do
                     %i{class: "glyphicon glyphicon-ok"}

@@ -35,16 +35,4 @@ class Answer < ActiveRecord::Base
     vote.destroy!
   end
 
-  def vote_point
-    self.votes.where(useful: true).count - self.votes.where(useful: false).count
-  end
-
-  def has_up_voted?(user)
-    (self.votes.find_by(user: user).present?)? self.votes.find_by(user: user).useful: false
-  end
-
-  def has_down_voted?(user)
-    (self.votes.find_by(user: user).present?)? !self.votes.find_by(user: user).useful: false
-  end
-
 end

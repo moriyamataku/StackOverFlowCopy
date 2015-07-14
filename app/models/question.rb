@@ -68,10 +68,6 @@ class Question < ActiveRecord::Base
     self.tags.map(&:name).join(' ')
   end
 
-  def vote_point
-    self.votes.where(useful: true).count - self.votes.where(useful: false).count
-  end
-
   def get_answers_count
     self.try(:answers_count) || 0
   end
@@ -82,13 +78,5 @@ class Question < ActiveRecord::Base
 
   def has_favorite?(user)
     self.favorites.find_by(user: user).present?
-  end
-
-  def has_up_voted?(user)
-    (self.votes.find_by(user: user).present?) ? self.votes.find_by(user: user).useful : false
-  end
-
-  def has_down_voted?(user)
-    (self.votes.find_by(user: user).present?) ? !self.votes.find_by(user: user).useful : false
   end
 end
