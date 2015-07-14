@@ -4,13 +4,10 @@
       %tr
         %td{class: :votecell}
           .vote
-            = render partial: "questions/votes", locals: {votes: question.votes, question: question}
-            - if question.has_favorite?(current_user)
-              = link_to cancel_favorite_question_path(question_id: question), method: :delete, remote: :true, class: "vote-up vote-on" do
-                %i{class: "glyphicon glyphicon-star"}
-            - else
-              = link_to favorite_question_path(question_id: question), method: :put, remote: :true, class: "vote-up vote-off" do
-                %i{class: "glyphicon glyphicon-star"}
+            %div{id: "question-vote-#{question.id}"}
+              = render partial: "questions/votes", locals: {votes: question.votes, question: question}
+            %div{id: "question-favorite-#{question.id}"}
+              = render partial: "questions/favorites", locals: {favorites: question.favorites, question: question}
         %td
           .post-text
             = simple_format(question.body)

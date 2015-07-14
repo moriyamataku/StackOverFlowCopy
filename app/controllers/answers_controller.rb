@@ -25,22 +25,27 @@ class AnswersController < ApplicationController
 
   def mark
     @answer.set_mark
+    render 'update_mark'
   end
 
   def cancel_mark
     @answer.cancel_mark
+    render 'update_mark'
   end
 
   def up_vote
     @answer.do_vote(current_user, true)
+    render 'update_votes'
   end
 
   def down_vote
     @answer.do_vote(current_user, false)
+    render 'update_votes'
   end
 
   def cancel_vote
     @answer.cancel_vote(current_user)
+    render 'update_votes'
   end
 
   private

@@ -42,22 +42,27 @@ class QuestionsController < ApplicationController
 
   def up_vote
     @question.do_vote(current_user, true)
+    render 'update_votes'
   end
 
   def down_vote
     @question.do_vote(current_user, false)
+    render 'update_votes'
   end
 
   def cancel_vote
     @question.cancel_vote(current_user)
+    render 'update_votes'
   end
 
   def favorite
     @question.regist_favorite(current_user)
+    render 'update_favorites'
   end
 
   def cancel_favorite
     @question.cancel_favorite(current_user)
+    render 'update_favorites'
   end
 
   private

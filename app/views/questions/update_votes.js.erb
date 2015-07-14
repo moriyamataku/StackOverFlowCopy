@@ -1,0 +1,2 @@
+$("#question-vote-<%= @question.id %>").html(
+  "<%= j(render partial: 'questions/votes' ,locals: {votes: @question.votes, question: @question}) %>")

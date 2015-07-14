@@ -76,7 +76,4 @@ class Question < ActiveRecord::Base
     self.try(:views_count) || 0
   end
 
-  def has_favorite?(user)
-    self.favorites.find_by(user: user).present?
-  end
 end

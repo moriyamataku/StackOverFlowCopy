@@ -1,0 +1,6 @@
+- if answer.marked
+  = link_to cancel_mark_question_answer_path(question_id: question, answer_id: answer), method: :delete, remote: :true, class: "vote-up vote-on" do
+    %i{class: "glyphicon glyphicon-ok"}
+- else
+  = link_to mark_question_answer_path(question_id: question, answer_id: answer), method: :put, remote: :true, class: "vote-up vote-off" do
+    %i{class: "glyphicon glyphicon-ok"}

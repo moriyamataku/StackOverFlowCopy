@@ -1,0 +1,5 @@
+
+<% @answer.question.answers.each do |answer| %>
+  $("#answer-mark-<%= answer.id %>").html(
+    "<%= j(render partial: 'answers/marks' ,locals: {question: answer.question, answer: answer}) %>")
+<% end %>
