@@ -11,10 +11,10 @@
               |
               = comment.user.user_name
               |
-              = link_to_if comment.user == current_user, '削除する', "#{link_path}/#{comment.id}" , method: :delete
+              = link_to_if comment.user == current_user, '削除する', "#{link_path}/#{comment.id}" , method: :delete, remote: true
             %hr
 - @comment = parent.comments.build
-= form_for @comment, url: link_path do |f|
+= form_for @comment, url: link_path, remote: true do |f|
   .field
     = f.text_field :body, class: "title-text"
   .actions

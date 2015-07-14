@@ -1,0 +1,7 @@
+<% if @parent.class.name == "Question" %>
+  $("#question-comment-<%= @parent.id %>").html("<%= j(render partial: 'comments/comments' ,
+    locals: {comments: @parent.comments, parent: @parent, link_path: "/questions/#{@parent.id}/comments"}) %>")
+<% elsif @parent.class.name == "Answer" %>
+  $("#answer-comment-<%= @parent.id %>").html("<%= j(render partial: 'comments/comments' ,
+    locals: {comments: @parent.comments, parent: @parent, link_path: "/questions/#{@parent.question.id}/answers/#{@parent.id}/comments"}) %>")
+<% end %>

@@ -6,16 +6,16 @@ class CommentsController < ApplicationController
     comment = @parent.comments.new(comment_param)
     comment.user = current_user
     if comment.save
-      redirect_to @question
+      render "comments/update_comments"
     else
-      redirect_to @question, alert: "エラー"
+      render "comments/update_comments_error"
     end
   end
 
   def destroy
     comment = @parent.comments.find_by!(user: current_user, id: params[:id])
     comment.destroy!
-    redirect_to @question
+    render "comments/update_comments"
   end
 
   private

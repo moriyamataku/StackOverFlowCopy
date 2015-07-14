@@ -26,7 +26,7 @@
                 = link_to_if answer.user == current_user, '編集する', edit_question_answer_path(question_id: @question, answer_id: answer)
           %tr
             %td{class: :votecell}
-            %td
+            %td{id: "answer-comment-#{answer.id}"}
               = render partial: "comments/comments", locals: {comments: answer.comments, link_path: "/questions/#{@question.id}/answers/#{answer.id}/comments", parent: answer}
           %tr
             %td{colspan: 2}
