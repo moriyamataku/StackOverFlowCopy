@@ -11,33 +11,28 @@ class Question < ActiveRecord::Base
 
   validates :title, :body, presence: true
 
-  scope :tab, -> type {
-    if type == "hot"
-      where("updated_at > ?", Time.now - 2.days).order(views_count: :desc)
-    elsif type == "week"
-      where("updated_at > ?", Time.now - 1.week).order(views_count: :desc)
-    elsif type == "month"
-      where("updated_at > ?", Time.now - 1.month).order(views_count: :desc)
-    elsif type == "unanswered"
-      where(answers_count: nil).order(created_at: :asc)
-    else
-      order(updated_at: :desc)
-    end
+  default_scope -> {order(updated_at: :desc).includes(:votes, :tags, :user)}
+
+  scope :active, -> { where("solved IS NULL or solved = ?", false) }
+  scope :hot, -> { where("updated_at > ?", Time.now - 2.days).reorder(views_count: :desc) }
+  scope :week, -> { where("updated_at > ?", Time.now - 1.week).reorder(views_count: :desc) }
+  scope :month, -> { where("updated_at > ?", Time.now - 1.month).reorder(views_count: :desc) }
+  scope :unanswered, -> { where(answers_count: nil).reorder(created_at: :asc) }
+
+  scope :search_by_type, -> type {
+    defined_search_type = ["active", "hot", "week", "month", "unanswered"]
+    send(type.to_s) if defined_search_type.include?(type)
   }
   scope :tagged_with, -> tag {
-    # TODO: 実装する
-    # tag join
+    question_ids = joins(:tags).where('tags.name = ?', tag).select(:id)
+    where(id: question_ids)
   }
 
   def regist_tags(tag_string)
-    if self.persisted?
-      self.tags.destroy_all
+    tags = tag_string.split(" ").inject([]) do |tags, strTag|
+      tags << Tag.find_or_initialize_by(name: strTag)
     end
-    strTags = tag_string.split(" ")
-    strTags.each do |strTag|
-      tag = Tag.find_or_initialize_by(name: strTag)
-      self.tags << tag
-    end
+    self.tags = tags
   end
 
   def regist_view(user)

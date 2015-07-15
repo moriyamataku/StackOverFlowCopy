@@ -4,8 +4,7 @@ class QuestionsController < ApplicationController
   after_action :regist_view, only: :show
 
   def index
-    @questions = Question.order(updated_at: :desc).page(params[:page])
-    @questions = @questions.tab(params[:tab]) if params[:tab].present?
+    @questions = Question.search_by_type(params[:tab]).page(params[:page])
     @questions = @questions.tagged_with(params[:tag]) if params[:tag].present?
   end
 
@@ -17,8 +16,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
+    @question = current_user.questions.build(question_params)
     @question.regist_tags(tag_params)
     if @question.save
       redirect_to @question
