@@ -10,11 +10,10 @@
               = render partial: "questions/favorites", locals: {favorites: question.favorites, question: question}
         %td
           .post-text
-            = simple_format(question.body)
+            = simple_format(h(question.body))
           .post-taglist
             - question.tags.each do |tag|
               = link_to tag.name, questions_path, class: "post-tag"
-            %br
           .started
             = "更新日時:#{question.updated_at.getlocal.strftime("%m月%d日 %H:%M")}"
             |

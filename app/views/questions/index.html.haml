@@ -32,7 +32,6 @@
             - question.tags.each do |tag|
               = link_to tag.name, questions_path(tag: tag.name), class: "post-tag"
           .started
-            /= "更新日時:#{l(question.updated_at)}"
             = time_ago_in_words(question.updated_at)
             |
             = question.user.user_name
